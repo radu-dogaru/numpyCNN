@@ -1,6 +1,7 @@
 from functools import reduce
 
 import numpy as np
+import time as ti
 
 from src.optimizer import gradient_descent
 
@@ -172,6 +173,7 @@ class NeuralNetwork:
         step = 0
         for e in range(num_epochs):
             print("Epoch " + str(e + 1))
+            t1=ti.time()
             epoch_cost = 0
 
             if mini_batch_size == x_train.shape[0]:
@@ -189,9 +191,15 @@ class NeuralNetwork:
             print(f"\nCost after epoch {e+1}: {epoch_cost}")
 
             print("Computing accuracy on validation set...")
+            t3=ti.time()
+            #print('YVAL ',y_val)
             accuracy = np.sum(np.argmax(self.predict(x_val), axis=1) == y_val) / x_val.shape[0]
-            print(f"Accuracy on validation set: {accuracy}")
-
+            
+            #print('Predicted: ', np.argmax(self.predict(x_val), axis=1))
+            t4=ti.time()
+            print('Accuracy on validation set: ',accuracy)
+            print('Latentza pe set test: ',1000*(t4-t3)/x_val.shape[0], 'mili-secunde')
+            print('Durata epoca: ',ti.time()-t1,' secunde')
         print("Finished training")
 
     def train_step(self, x_train, y_train, learning_rate, step):
@@ -235,6 +243,7 @@ class NeuralNetwork:
             Mini batches pairs of input and target labels.
         """
         batch_size = x.shape[0]
+        
         mini_batches = []
 
         p = np.random.permutation(x.shape[0])

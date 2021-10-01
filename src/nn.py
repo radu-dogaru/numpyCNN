@@ -171,6 +171,8 @@ class NeuralNetwork:
         x_val, y_val = validation_data
         print(f"Started training [batch_size={mini_batch_size}, learning_rate={learning_rate}]")
         step = 0
+        best_acc=0  # Cea mai buna acuratete obtinuta in ciclul de antrenare 
+
         for e in range(num_epochs):
             print("Epoch " + str(e + 1))
             t1=ti.time()
@@ -194,14 +196,16 @@ class NeuralNetwork:
             t3=ti.time()
             #print('YVAL ',y_val)
             accuracy = np.sum(np.argmax(self.predict(x_val), axis=1) == y_val) / x_val.shape[0]
-            
+            if accuracy>best_acc:
+              best_acc=accuracy
+              best_e=e
             #print('Predicted: ', np.argmax(self.predict(x_val), axis=1))
             t4=ti.time()
             print('Accuracy on validation set: ',accuracy)
             print('Latentza pe set test: ',1000*(t4-t3)/x_val.shape[0], 'mili-secunde')
             print('Durata epoca: ',ti.time()-t1,' secunde')
         print("Finished training")
-
+        print('Cea mai buna acuratete pe set validare: ',best_acc, 'In epoca: ', best_e)
     def train_step(self, x_train, y_train, learning_rate, step):
         """
         Performs one model training step.

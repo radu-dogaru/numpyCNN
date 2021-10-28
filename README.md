@@ -1,3 +1,17 @@
+# Un exemplu util pentru a intelege constructia unor retele neuronale convolutionale (preluat din lpraat/numpyCNN
+S-a adaugat sinapsa comparativa descrisa in https://www2.eecs.berkeley.edu/Pubs/TechRpts/1997/ERL-97-5.pdf 
+https://www2.eecs.berkeley.edu/Pubs/TechRpts/1997/ERL-97-40.pdf
+cu relevanta in implementari HW (in lucru, partea de propagare erori nu este rezolvata) 
+
+Performanta (timp de antrenare / testare) nu este extraordinara (dat fiind ca NUMPY nu suporta GPU). 
+Se poate incerca lucrul cu CUPY (metodele de baza sunt aceleasi de ex. np.dot() --> cp.dot() dar pentru a obtine accelerari 
+variabilele trebuiesc stocate pe GPU 
+
+
+#-----------------------------------------------------------------------------------------------------------------
+
+
+
 # NumpyCNN
 A simple vectorized implementation of a Convolutional Neural Network in plain numpy I wrote while learning about neural networks, aaaand more.   
 

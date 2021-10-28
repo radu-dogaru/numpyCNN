@@ -9,7 +9,8 @@ variabilele trebuiesc stocate pe GPU
 
 Code is avalailable as the notebook numpy_cnn_comparative_v2.ipynb
 
-<a href="https://colab.research.google.com/github/radu-dogaru/numpyCNN/blob/main/numpy_cnn_comparative_v2.ipynb">
+
+<a href="https://colab.research.google.com/github/radu-dogaru/numpyCNN/blob/master/numpy_cnn_comparative_v2.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 

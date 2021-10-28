@@ -7,9 +7,14 @@ Performanta (timp de antrenare / testare) nu este extraordinara (dat fiind ca NU
 Se poate incerca lucrul cu CUPY (metodele de baza sunt aceleasi de ex. np.dot() --> cp.dot() dar pentru a obtine accelerari 
 variabilele trebuiesc stocate pe GPU 
 
+Code is avalailable as the notebook numpy_cnn_comparative_v2.ipynb
+
+<a href="https://colab.research.google.com/github/radu-dogaru/numpyCNN/blob/main/numpy_cnn_comparative_v2.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
 
 #-----------------------------------------------------------------------------------------------------------------
-
+Original description from lpraat/numpyCNN 
 
 
 # NumpyCNN
@@ -54,7 +59,9 @@ There are examples of its usage in the tests.
 
 #### Layers
 - FullyConnected (Dense)
+- CFullyConnected (Dense with comparative synapse - added by R. Dogaru) 
 - Conv (Conv2D)
+- Cconv (with comparative synapse) - added by R. Dogaru 
 - Pool (MaxPool2D, AveragePool2D)
 - Dropout
 - Flatten

@@ -1,7 +1,7 @@
-import numpy as np
+import cupy as np
 
-from src.activation import identity
-from src.layers.layer import Layer
+from csrc.activation import identity
+from csrc.layers.layer import Layer
 
 
 class CConv(Layer):
@@ -58,13 +58,13 @@ class CConv(Layer):
         self.n_h = int((self.n_h_prev - self.kernel_size + 2 * self.pad) / self.stride + 1)
         self.n_w = int((self.n_w_prev - self.kernel_size + 2 * self.pad) / self.stride + 1)
 
-        self.w = np.random.randn(self.kernel_size, self.kernel_size, self.n_c_prev, self.n_c)
-        self.b = np.zeros((1, 1, 1, self.n_c))
+        self.w = cp.random.randn(self.kernel_size, self.kernel_size, self.n_c_prev, self.n_c)
+        self.b = cp.zeros((1, 1, 1, self.n_c))
 
     def forward(self, a_prev, training):
         batch_size = a_prev.shape[0]
         a_prev_padded = CConv.zero_pad(a_prev, self.pad)
-        out = np.zeros((batch_size, self.n_h, self.n_w, self.n_c))
+        out = cp.zeros((batch_size, self.n_h, self.n_w, self.n_c))
 
         # Convolve
         for i in range(self.n_h):
@@ -76,15 +76,15 @@ class CConv(Layer):
                 h_end = h_start + self.kernel_size
 
                 #----------Modificat Dogaru 
-                aaa=a_prev_padded[:, v_start:v_end, h_start:h_end, :, np.newaxis]
-                bbb=self.w[np.newaxis, :, :, :]
-                #out[:, i, j, :] = np.sum( aaa * bbb, axis=(1, 2, 3)) # Convolutia normala 
-                out[:, i, j, :] = np.sum( abs(aaa+bbb)-abs(aaa-bbb), axis=(1, 2, 3)) # Convolutia comparativa
-                #print('Forma 1',np.shape(a_prev_padded[:, v_start:v_end, h_start:h_end, :, np.newaxis]))
-                #print('Forma 2',np.shape(self.w[np.newaxis, :, :, :]))
-                #out[:, i, j, :] = np.sum(np.min(a_prev_padded[:, v_start:v_end, h_start:h_end, :, np.newaxis],
-                #                         self.w[np.newaxis, :, :, :]), axis=(1, 2, 3))
-                #print('Forma out ', np.shape(out[:,i,j,:]) )
+                aaa=a_prev_padded[:, v_start:v_end, h_start:h_end, :, cp.newaxis]
+                bbb=self.w[cp.newaxis, :, :, :]
+                #out[:, i, j, :] = cp.sum( aaa * bbb, axis=(1, 2, 3)) # Convolutia normala 
+                out[:, i, j, :] = cp.sum( abs(aaa+bbb)-abs(aaa-bbb), axis=(1, 2, 3)) # Convolutia comparativa
+                #print('Forma 1',cp.shape(a_prev_padded[:, v_start:v_end, h_start:h_end, :, cp.newaxis]))
+                #print('Forma 2',cp.shape(self.w[cp.newaxis, :, :, :]))
+                #out[:, i, j, :] = cp.sum(cp.min(a_prev_padded[:, v_start:v_end, h_start:h_end, :, cp.newaxis],
+                #                         self.w[cp.newaxis, :, :, :]), axis=(1, 2, 3))
+                #print('Forma out ', cp.shape(out[:,i,j,:]) )
                 
 
         z = out + self.b
@@ -101,12 +101,12 @@ class CConv(Layer):
         a_prev, z, a = (self.cache[key] for key in ('a_prev', 'z', 'a'))
         a_prev_pad = CConv.zero_pad(a_prev, self.pad) if self.pad != 0 else a_prev
 
-        da_prev = np.zeros((batch_size, self.n_h_prev, self.n_w_prev, self.n_c_prev))
+        da_prev = cp.zeros((batch_size, self.n_h_prev, self.n_w_prev, self.n_c_prev))
         da_prev_pad = CConv.zero_pad(da_prev, self.pad) if self.pad != 0 else da_prev
 
         dz = da * self.activation.df(z, cached_y=a)
         db = 1 / batch_size * dz.sum(axis=(0, 1, 2))
-        dw = np.zeros((self.kernel_size, self.kernel_size, self.n_c_prev, self.n_c))
+        dw = cp.zeros((self.kernel_size, self.kernel_size, self.n_c_prev, self.n_c))
 
         # 'Convolve' back
         for i in range(self.n_h):
@@ -117,20 +117,20 @@ class CConv(Layer):
                 h_start = self.stride * j
                 h_end = h_start + self.kernel_size
                 
-                aaa=a_prev_pad[:, v_start:v_end, h_start:h_end, :, np.newaxis]
-                www=self.w[np.newaxis, :, :, :]
-                ddd=dz[:, i:i+1, j:j+1, np.newaxis, :]
+                aaa=a_prev_pad[:, v_start:v_end, h_start:h_end, :, cp.newaxis]
+                www=self.w[cp.newaxis, :, :, :]
+                ddd=dz[:, i:i+1, j:j+1, cp.newaxis, :]
 
                 # eroarea propagata invers 
                 da_prev_pad[:, v_start:v_end, h_start:h_end, :] += \
-                    np.sum( www * ddd , axis=4)
-                    #np.sum( 0.5*(np.abs(www+ddd)-np.abs(www-ddd)) , axis=4)
+                    cp.sum( www * ddd , axis=4)
+                    #cp.sum( 0.5*(cp.abs(www+ddd)-cp.abs(www-ddd)) , axis=4)
                     #
                 
 
                 # update-ul de ponderi 
-                dw += np.sum(aaa * ddd, axis=0)
-                #dw += np.sum(0.5*(np.sign(aaa+ddd)-np.sign(aaa-ddd)), axis=0)
+                dw += cp.sum(aaa * ddd, axis=0)
+                #dw += cp.sum(0.5*(cp.sign(aaa+ddd)-cp.sign(aaa-ddd)), axis=0)
 
         dw /= batch_size
 
@@ -151,4 +151,4 @@ class CConv(Layer):
 
     @staticmethod
     def zero_pad(x, pad):
-        return np.pad(x, ((0, 0), (pad, pad), (pad, pad), (0, 0)), mode='constant')
+        return cp.pad(x, ((0, 0), (pad, pad), (pad, pad), (0, 0)), mode='constant')

@@ -92,7 +92,7 @@ class Pool(Layer):
     def backward(self, da):
         a_prev = self.cache['a_prev']
         batch_size = a_prev.shape[0]
-        da_prev = np.zeros((batch_size, self.n_h_prev, self.n_w_prev, self.n_c_prev))
+        da_prev = cp.zeros((batch_size, self.n_h_prev, self.n_w_prev, self.n_c_prev))
 
         # 'Pool' back
         for i in range(self.n_h):
@@ -120,7 +120,7 @@ class Pool(Layer):
     def cache_max_mask(self, x, ij):
         mask = cp.zeros_like(x)
 
-        # This would be like doing idx = np.argmax(x, axis=(1,2)) if that was possible
+        # This would be like doing idx = cp.argmax(x, axis=(1,2)) if that was possible
         reshaped_x = x.reshape(x.shape[0], x.shape[1] * x.shape[2], x.shape[3])
         idx = cp.argmax(reshaped_x, axis=1)
 

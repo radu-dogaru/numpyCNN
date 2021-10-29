@@ -3,7 +3,7 @@ from functools import reduce
 import cupy as cp
 import time as ti
 
-from src.optimizer import gradient_descent
+from csrc.optimizer import gradient_descent
 
 
 class NeuralNetwork:

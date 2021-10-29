@@ -1,4 +1,4 @@
-import cupy as np
+import cupy as cp
 
 from csrc.activation import identity
 from csrc.layers.layer import Layer

@@ -1,6 +1,6 @@
 import cupy as cp
 
-from src.layers.layer import Layer
+from csrc.layers.layer import Layer
 
 
 class Dropout(Layer):

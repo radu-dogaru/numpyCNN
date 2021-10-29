@@ -1,7 +1,7 @@
 import cupy as cp
 
-from src.activation import identity
-from src.layers.layer import Layer
+from csrc.activation import identity
+from csrc.layers.layer import Layer
 
 
 class Conv(Layer):

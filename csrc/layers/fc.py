@@ -2,8 +2,8 @@
 
 import cupy as cp
 
-from src.activation import SoftMax
-from src.layers.layer import Layer
+from csrc.activation import SoftMax
+from csrc.layers.layer import Layer
 
 
 class FullyConnected(Layer):

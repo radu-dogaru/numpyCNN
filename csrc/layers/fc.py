@@ -35,7 +35,7 @@ class FullyConnected(Layer):
 
     def init(self, in_dim):
         # He initialization
-        self.w = cp.random.randn(self.size, in_dim) * np.sqrt(2 / in_dim)
+        self.w = cp.random.randn(self.size, in_dim) * cp.sqrt(2 / in_dim)
 
         self.b = cp.zeros((1, self.size))
 

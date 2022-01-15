@@ -135,7 +135,7 @@ void cp_comp(                           // ATENTIE LA DENUMIREA FUNCTIEI SA COIN
                     //rC[n][m] += rA[m] * rB[n] ;  
                     // Mai jos "comparativa"
                     // Mai jos "comparativa"
-                    //rC[n][m] += (abs(rA[m] + rB[n])-abs(rA[m] - rB[n]))/2; 
+                    rC[n][m] += (abs(rA[m] + rB[n])-abs(rA[m] - rB[n]))/2; 
                     // ineficient 22540 fata de 600 (timp exec) 
                     /*
                     if ((ra[m]<0 && rB[n]<0) || (ra[m]>=0 && rB[n]>=0)) {
@@ -200,6 +200,7 @@ void cp_comp(                           // ATENTIE LA DENUMIREA FUNCTIEI SA COIN
                 // Aici operator comparativ 
                 // rC[n][m] += min( rA[m] , rB[n]);
                 // Mai jos "comparativa"
+                //rC[n][m] += rA[m] * rB[n];
                 rC[n][m] += (abs(rA[m] + rB[n])-abs(rA[m] - rB[n]))/2; 
                 // ineficienta 
                 /*

@@ -58,13 +58,13 @@ class CConv(Layer):
         self.n_h = int((self.n_h_prev - self.kernel_size + 2 * self.pad) / self.stride + 1)
         self.n_w = int((self.n_w_prev - self.kernel_size + 2 * self.pad) / self.stride + 1)
 
-        self.w = cp.random.randn(self.kernel_size, self.kernel_size, self.n_c_prev, self.n_c)
-        self.b = cp.zeros((1, 1, 1, self.n_c))
+        self.w = cp.random.randn(self.kernel_size, self.kernel_size, self.n_c_prev, self.n_c).astype('float32')
+        self.b = cp.zeros((1, 1, 1, self.n_c)).astype('float32')
 
     def forward(self, a_prev, training):
         batch_size = a_prev.shape[0]
-        a_prev_padded = CConv.zero_pad(a_prev, self.pad)
-        out = cp.zeros((batch_size, self.n_h, self.n_w, self.n_c))
+        a_prev_padded = CConv.zero_pad(a_prev, self.pad).astype('float32')
+        out = cp.zeros((batch_size, self.n_h, self.n_w, self.n_c)).astype('float32')
 
         # Convolve
         for i in range(self.n_h):
@@ -94,7 +94,7 @@ class CConv(Layer):
             # Cache for backward pass
             self.cache.update({'a_prev': a_prev, 'z': z, 'a': a})
 
-        return a
+        return a.astype('float32')
 
     def backward(self, da):
         batch_size = da.shape[0]
@@ -151,4 +151,4 @@ class CConv(Layer):
 
     @staticmethod
     def zero_pad(x, pad):
-        return cp.pad(x, ((0, 0), (pad, pad), (pad, pad), (0, 0)), mode='constant')
+        return cp.pad(x, ((0, 0), (pad, pad), (pad, pad), (0, 0)), mode='constant').astype('float32')

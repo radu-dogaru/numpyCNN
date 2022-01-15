@@ -87,7 +87,7 @@ class Pool(Layer):
         if training:
             self.cache['a_prev'] = a_prev
 
-        return a
+        return a.astype('float32')
 
     def backward(self, da):
         a_prev = self.cache['a_prev']

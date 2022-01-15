@@ -4,6 +4,9 @@
 # By Radu DOGARU (radu.dogaru@upb.ro) 
 # Last update Jan. 15, 2020 
 #-----------------------------------------------------------------------------------------------
+import cupy as cp
+import numpy as np 
+import math
 
 def read_code(code_filename, params):
     with open(code_filename, 'r') as f:
@@ -27,7 +30,7 @@ def benchmark(func, args, n_run):
 # File cp_comp.cu is the CUDA kernel description in C Cuda 
 # Shoud be present in the same directory 
 
-cp_comp_file='cp_comp.cu'
+cp_comp_file='./csrc/cp_comp.cu'
 
 
 # The Python definition of the cp_comp "comparative" operator 

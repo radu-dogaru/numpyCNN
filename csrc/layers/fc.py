@@ -35,9 +35,10 @@ class FullyConnected(Layer):
 
     def init(self, in_dim):
         # He initialization
-        self.w = cp.random.randn(self.size, in_dim) * cp.sqrt(2 / in_dim)
+        self.w = (cp.random.randn(self.size, in_dim) * cp.sqrt(2 / in_dim)).astype('float32')
 
-        self.b = cp.zeros((1, self.size))
+
+        self.b = cp.zeros((1, self.size)).astype('float32')
 
     def forward(self, a_prev, training):
         z = cp.dot(a_prev, self.w.T) + self.b

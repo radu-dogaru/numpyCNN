@@ -44,18 +44,7 @@ class C2FullyConnected(Layer):
         #print('Forma1: ',cp.shape(a_prev))
         #print('Forma1: ',cp.shape(self.w.T))
         z = cp_comp(a_prev, self.w.T) + self.b  # strat comparativ  
-        # strat comparativ - de lucrat 
-        '''
-        aaa=a_prev
-        bbb=self.w.T
-        bs=cp.shape(aaa)[0]
-        nc=cp.shape(bbb)[1]
-        z=cp.zeros((bs,nc))
-        for k in range(nc):
-          z[:,k]=0.5*cp.sum(abs(aaa+bbb[:,k])-abs(aaa-bbb[:,k]), axis=1)
-        '''
-        z=z+self.b
-        #------------------------------
+       
         
 
         a = self.activation.f(z)

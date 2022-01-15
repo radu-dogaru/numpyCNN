@@ -3,8 +3,11 @@ import  cupy as  cp
 from csrc.activation import SoftMax
 from csrc.layers.layer import Layer
 
+# Cu sinapsa comparativa GPU 
 
-class CFullyConnected(Layer):
+from csrc.comp_syn import cp_comp
+
+class C2FullyConnected(Layer):
     """Densely connected layer (comparative).
 
     Attributes
@@ -33,9 +36,9 @@ class CFullyConnected(Layer):
 
     def init(self, in_dim):
         # He initialization
-        self.w = cp.random.randn(self.size, in_dim) * cp.sqrt(2 / in_dim)
-
-        self.b = cp.zeros((1, self.size))
+        self.w = (cp.random.randn(self.size, in_dim) * cp.sqrt(2 / in_dim)).astype('float32')
+        # S-a trecut la tip float32 pentru a putea apela operatorul cp_comp 
+        self.b = cp.zeros((1, self.size)).astype('float32')
 
     def forward(self, a_prev, training):
         #print('Forma1: ',cp.shape(a_prev))

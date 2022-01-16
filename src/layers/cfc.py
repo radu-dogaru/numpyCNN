@@ -33,9 +33,9 @@ class CFullyConnected(Layer):
 
     def init(self, in_dim):
         # He initialization
-        self.w = np.random.randn(self.size, in_dim) * np.sqrt(2 / in_dim)
+        self.w = (np.random.randn(self.size, in_dim) * np.sqrt(2 / in_dim)).astype('float32')
 
-        self.b = np.zeros((1, self.size))
+        self.b = np.zeros((1, self.size)).astype('float32')
 
     def forward(self, a_prev, training):
         #print('Forma1: ',np.shape(a_prev))
@@ -88,9 +88,9 @@ class CFullyConnected(Layer):
         n2=np.shape(a_prev)[1]
         dw=np.zeros((m1,n2))
         for k in range(m1):
-            dw[k,:]=np.sum(dz.T[k,:] * a_prev.T, axis=1)    
+            #dw[k,:]=np.sum(dz.T[k,:] * a_prev.T, axis=1)    
             #dw[k,:]=0.5*np.sum(np.abs(dz.T[k,:]+a_prev.T)-np.abs(dz.T[k,:]-a_prev.T),axis=1)
-            #dw[k,:]=0.002*np.sum(np.sign(dz.T[k,:]+a_prev.T)+np.sign(dz.T[k,:]-a_prev.T),axis=1)
+            dw[k,:]=0.002*np.sum(np.sign(dz.T[k,:]+a_prev.T)+np.sign(dz.T[k,:]-a_prev.T),axis=1)
         dw = 1 / batch_size * dw
         
         #print('Forma dz.T : ',np.shape(dz.T))
